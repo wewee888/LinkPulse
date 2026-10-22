@@ -1,7 +1,7 @@
 {
-  "name": "react-example",
+  "name": "linkpulse",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "tsx server.ts",
@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",
-    "test": "tsx --test src/utils/seoEngine.test.ts"
+    "test": "tsx --test src/utils/seoEngine.test.ts",
+    "deploy": "vite build && wrangler pages deploy dist --project-name linkpulse --branch main"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",
@@ -26,6 +27,7 @@
     "vite": "^8.3.0"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250505.0",
     "@types/d3": "^7.4.3",
     "@types/express": "^4.17.21",
     "@types/node": "^22.14.0",
@@ -35,6 +37,7 @@
     "esbuild": "^0.25.0",
     "tailwindcss": "^4.3.3",
     "tsx": "^4.21.0",
-    "typescript": "^7.0.2"
+    "typescript": "^7.0.2",
+    "wrangler": "^4.100.0"
   }
 }

@@ -1,0 +1,8 @@
+name = "linkpulse"
+pages_build_output_dir = "dist"
+compatibility_date = "2025-05-05"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+MINIMAX_BASE_URL = "https://api.minimax.io/v1"
+APP_URL = "https://linkpulse.pages.dev"
