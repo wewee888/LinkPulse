@@ -1,4 +1,4 @@
-export type MiniMaxModelId = 'MiniMax-M2' | 'MiniMax-Text-01' | 'MiniMax-M2.5';
+export type MiniMaxModelId = 'MiniMax-M3.1-Flash' | 'MiniMax-M3.1' | 'MiniMax-M3' | 'MiniMax-Text-01';
 
 export type CommentObjective =
   | 'add_insight'
@@ -797,12 +797,22 @@ export function generateChromeExtensionFiles(
     name: 'LinkPulse Commenter — MiniMax Multi-Site Blog & Backlink SEO Plugin',
     version: '1.3.0',
     description:
-      'Reads full blog articles with MiniMax-M2 / MiniMax-Text-01 and injects white-hat SEO comments & backlinks for soundtest.pro, jmcy.cn, franvetted.com and custom sites.',
+      'Reads full blog articles with MiniMax-M3.1-Flash / MiniMax-M3.1 and injects white-hat SEO comments & backlinks for soundtest.pro, jmcy.cn, franvetted.com and custom sites.',
     permissions: ['activeTab', 'storage', 'scripting'],
     host_permissions: ['<all_urls>'],
+    icons: {
+      '16': 'icon16.png',
+      '48': 'icon48.png',
+      '128': 'icon128.png',
+    },
     action: {
       default_popup: 'popup.html',
       default_title: 'LinkPulse MiniMax SEO Plugin',
+      default_icon: {
+        '16': 'icon16.png',
+        '48': 'icon48.png',
+        '128': 'icon128.png',
+      },
     },
     background: {
       service_worker: 'background.js',

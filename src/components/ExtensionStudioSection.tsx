@@ -8,7 +8,8 @@ import {
   generateChromeExtensionFiles,
   synthesizeMiniMaxComments,
 } from '../utils/seoEngine';
-import { Check, Copy, Download, Plus, Puzzle, Sparkles } from 'lucide-react';
+import { Bookmark, Check, Copy, Download, ExternalLink, Plus, Puzzle, Sparkles, X, Zap } from 'lucide-react';
+import { buildExtensionZipBlob, downloadBlob, generateBookmarkletCode, generateUserscriptCode } from '../utils/extensionPacker';
 
 interface ExtensionStudioSectionProps {
   siteProfiles: PromotedSiteProfile[];
@@ -28,7 +29,7 @@ export function ExtensionStudioSection({
   const activeSite =
     siteProfiles.find((s) => s.id === activeSiteId) || siteProfiles[0];
 
-  const [extModel, setExtModel] = useState<MiniMaxModelId>('MiniMax-M2');
+  const [extModel, setExtModel] = useState<MiniMaxModelId>('MiniMax-M3.1-Flash');
   const [extPlacement, setExtPlacement] = useState<PlacementMode>('html_anchor');
   const [activeCodeTab, setActiveCodeTab] = useState<
     'manifest.json' | 'content.js' | 'popup.html' | 'background.js'
@@ -61,7 +62,7 @@ export function ExtensionStudioSection({
       objective: 'add_insight',
       placementMode: 'html_anchor',
       anchorType: 'branded',
-      model: 'MiniMax-M2',
+      model: 'MiniMax-M3.1-Flash',
       language: activeSite.preferredLanguage,
     });
     return initialVariants[0].htmlPayload;
@@ -213,6 +214,77 @@ export function ExtensionStudioSection({
     [activeSite, simAuthor, simEmail, extModel, extPlacement, siteProfiles]
   );
 
+  const userscriptCode = useMemo(
+    () =>
+      generateUserscriptCode({
+        serverUrl:
+          typeof window !== 'undefined'
+            ? window.location.origin
+            : 'https://linkpulse-3uk.pages.dev',
+        defaultTargetUrl: activeSite.targetUrl,
+        defaultKeyword: activeSite.defaultKeyword,
+        defaultBrandName: activeSite.brandName,
+        defaultAuthorName: simAuthor,
+        defaultAuthorEmail: simEmail,
+        defaultModel: extModel,
+        defaultPlacementMode: extPlacement,
+        siteProfiles,
+      }),
+    [activeSite, simAuthor, simEmail, extModel, extPlacement, siteProfiles]
+  );
+
+  const bookmarkletCode = useMemo(
+    () =>
+      generateBookmarkletCode({
+        serverUrl:
+          typeof window !== 'undefined'
+            ? window.location.origin
+            : 'https://linkpulse-3uk.pages.dev',
+        defaultTargetUrl: activeSite.targetUrl,
+        defaultKeyword: activeSite.defaultKeyword,
+        defaultBrandName: activeSite.brandName,
+        defaultAuthorName: simAuthor,
+        defaultAuthorEmail: simEmail,
+        defaultModel: extModel,
+        defaultPlacementMode: extPlacement,
+        siteProfiles,
+      }),
+    [activeSite, simAuthor, simEmail, extModel, extPlacement, siteProfiles]
+  );
+
+  const allCodeFiles = useMemo<Record<string, string>>(() => {
+    return {
+      'content.js': extensionBundle['content.js'],
+      'manifest.json': extensionBundle['manifest.json'],
+      'linkpulse.user.js': userscriptCode,
+      'bookmarklet.js': bookmarkletCode,
+      'popup.html': extensionBundle['popup.html'],
+      'background.js': extensionBundle['background.js'],
+    };
+  }, [extensionBundle, userscriptCode, bookmarkletCode]);
+
+  const handleDownloadZip = async () => {
+    setIsPackagingZip(true);
+    try {
+      const serverUrl =
+        typeof window !== 'undefined'
+          ? window.location.origin
+          : 'https://linkpulse-3uk.pages.dev';
+      const blob = await buildExtensionZipBlob(extensionBundle, serverUrl);
+      downloadBlob(blob, 'linkpulse-chrome-extension-v1.3.zip');
+    } catch (err) {
+      console.error('[Zip Build Error]', err);
+    } finally {
+      setIsPackagingZip(false);
+    }
+  };
+
+  const handleCopyExtensionsUrl = () => {
+    navigator.clipboard?.writeText('chrome://extensions');
+    setCopiedExtensionsUrl(true);
+    setTimeout(() => setCopiedExtensionsUrl(false), 2000);
+  };
+
   const handleDownloadSingleFile = (
     filename: keyof typeof extensionBundle,
     content: string
@@ -257,7 +329,7 @@ export function ExtensionStudioSection({
               Chrome 插件实境注入模拟器与源码打包中心
             </h2>
             <p className="text-sm text-zinc-600 max-w-3xl">
-              复刻并升级 <span className="font-medium text-zinc-900">comment-generator.com</span> 的无侵入浏览器插件形态：自动识别任意博客（WordPress / Ghost / Substack）评论框，注入 MiniMax 意图栏，一键切换你的推广站点并自动填入评论与外链字段。
+              采用无侵入浏览器插件与油猴脚本架构：自动识别任意博客（WordPress / Ghost / Substack）评论框，注入 MiniMax 意图栏，一键切换你的推广站点并自动填入评论与外链字段。
             </p>
           </div>
 
@@ -660,7 +732,7 @@ export function ExtensionStudioSection({
               {/* Code Preview Box */}
               <div className="relative">
                 <pre className="p-4 bg-zinc-950 text-zinc-100 rounded-xl text-xs font-mono overflow-x-auto max-h-[290px] leading-relaxed">
-                  {extensionBundle[activeCodeTab]}
+                  {allCodeFiles[activeCodeTab] || ''}
                 </pre>
 
                 <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
@@ -668,7 +740,7 @@ export function ExtensionStudioSection({
                     <button
                       type="button"
                       onClick={() =>
-                        handleCopyCode(activeCodeTab, extensionBundle[activeCodeTab])
+                        handleCopyCode(activeCodeTab, allCodeFiles[activeCodeTab] || '')
                       }
                       className="px-3 py-1.5 text-xs font-medium text-zinc-700 bg-zinc-100 hover:bg-zinc-200 rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer flex items-center gap-1.5"
                     >
@@ -710,9 +782,9 @@ export function ExtensionStudioSection({
                       onChange={(e) => setExtModel(e.target.value as MiniMaxModelId)}
                       className="px-2.5 py-1 text-xs font-mono bg-zinc-50 border border-zinc-300 rounded-md"
                     >
-                      <option value="MiniMax-M2">MiniMax-M2</option>
+                      <option value="MiniMax-M3.1-Flash">MiniMax-M3.1-Flash</option>
                       <option value="MiniMax-Text-01">MiniMax-Text-01</option>
-                      <option value="MiniMax-M2.5">MiniMax-M2.5</option>
+                      <option value="MiniMax-M3.1-Flash.5">MiniMax-M3.1-Flash.5</option>
                     </select>
                   </div>
                 </div>
@@ -739,6 +811,238 @@ export function ExtensionStudioSection({
           </div>
         </div>
       </div>
+
+      {/* Interactive 1-Click Browser Install Modal */}
+      {showInstallModal && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/60 backdrop-blur-xs"
+          onClick={() => setShowInstallModal(false)}
+        >
+          <div
+            className="bg-white rounded-2xl max-w-2xl w-full border border-zinc-200 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="p-5 md:p-6 border-b border-zinc-200 flex items-center justify-between bg-zinc-50/80">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600">
+                  <Zap className="w-5 h-5 fill-emerald-500 text-emerald-600" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-zinc-950">一键安装 LinkPulse 浏览器插件</h3>
+                  <p className="text-xs text-zinc-500">支持 Chrome、Edge、Brave、Firefox 等所有主流浏览器</p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setShowInstallModal(false)}
+                className="w-8 h-8 rounded-lg hover:bg-zinc-200/70 flex items-center justify-center text-zinc-500 hover:text-zinc-900 transition-colors cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Install Method Tabs */}
+            <div className="p-3 bg-zinc-100/70 border-b border-zinc-200 grid grid-cols-3 gap-1.5 text-xs font-medium">
+              <button
+                type="button"
+                onClick={() => setInstallMethod('userscript')}
+                className={`py-2 px-3 rounded-lg text-center transition-all cursor-pointer ${
+                  installMethod === 'userscript'
+                    ? 'bg-white text-zinc-950 shadow-xs font-bold border border-zinc-200'
+                    : 'text-zinc-600 hover:text-zinc-950'
+                }`}
+              >
+                🚀 油猴/脚本猫 (一键直装)
+              </button>
+              <button
+                type="button"
+                onClick={() => setInstallMethod('bookmarklet')}
+                className={`py-2 px-3 rounded-lg text-center transition-all cursor-pointer ${
+                  installMethod === 'bookmarklet'
+                    ? 'bg-white text-zinc-950 shadow-xs font-bold border border-zinc-200'
+                    : 'text-zinc-600 hover:text-zinc-950'
+                }`}
+              >
+                ⚡ 免安装书签 (拖拽即用)
+              </button>
+              <button
+                type="button"
+                onClick={() => setInstallMethod('zip')}
+                className={`py-2 px-3 rounded-lg text-center transition-all cursor-pointer ${
+                  installMethod === 'zip'
+                    ? 'bg-white text-zinc-950 shadow-xs font-bold border border-zinc-200'
+                    : 'text-zinc-600 hover:text-zinc-950'
+                }`}
+              >
+                📦 离线扩展包 (.ZIP)
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 overflow-y-auto space-y-5 flex-1">
+              {installMethod === 'userscript' && (
+                <div className="space-y-4">
+                  <div className="p-4 bg-emerald-50/70 border border-emerald-200 rounded-xl space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-emerald-950">方式一：油猴 / 脚本猫一键直装 (推荐 · 0配置)</span>
+                      <span className="text-[11px] font-mono text-emerald-800 bg-emerald-100/80 px-2 py-0.5 rounded-full">1秒生效</span>
+                    </div>
+
+                    <a
+                      href="/linkpulse.user.js"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full py-3.5 px-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-sm flex items-center justify-center gap-2.5 shadow-md transition-all active:scale-[0.99] cursor-pointer"
+                    >
+                      <Zap className="w-4 h-4 text-emerald-200 fill-emerald-200" />
+                      <span>点击立即一键安装进浏览器</span>
+                      <ExternalLink className="w-4 h-4 opacity-75" />
+                    </a>
+                  </div>
+
+                  <div className="space-y-2 text-xs text-zinc-600">
+                    <p className="font-semibold text-zinc-900">安装步骤说明：</p>
+                    <ol className="list-decimal list-inside space-y-1.5 leading-relaxed">
+                      <li>如果浏览器已安装 <strong>Tampermonkey (油猴)</strong> 或 <strong>脚本猫</strong>，点击上方绿色大按钮，浏览器将自动弹出脚本安装界面。</li>
+                      <li>在弹出的界面中点击右上角「安装 (Install)」按钮即可完成！</li>
+                      <li>安装后打开任意第三方博客（WordPress、Ghost、Substack 评论区），评论框上方会自动浮现 MiniMax 意图栏！</li>
+                    </ol>
+                  </div>
+
+                  <div className="p-3 bg-zinc-50 border border-zinc-200 rounded-lg text-xs text-zinc-500 space-y-1">
+                    <p className="font-medium text-zinc-700">尚未安装油猴？仅需在官方扩展商店添加一次：</p>
+                    <div className="flex flex-wrap items-center gap-3 pt-1">
+                      <a
+                        href="https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-emerald-700 hover:underline font-medium inline-flex items-center gap-1"
+                      >
+                        <span>Chrome 官方商店安装 Tampermonkey</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                      <span className="text-zinc-300">|</span>
+                      <a
+                        href="https://microsoftedge.microsoft.com/addons/detail/tampermonkey/iikmkjmpaadaobahmlepeloendndfphd"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-emerald-700 hover:underline font-medium inline-flex items-center gap-1"
+                      >
+                        <span>Edge 官方商店安装 Tampermonkey</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {installMethod === 'bookmarklet' && (
+                <div className="space-y-4">
+                  <div className="p-6 bg-zinc-50 border-2 border-dashed border-emerald-300 rounded-xl flex flex-col items-center justify-center text-center space-y-4">
+                    <p className="text-xs font-medium text-zinc-700">
+                      按住下方绿色胶囊按钮，<strong>直接拖拽至您的浏览器书签栏（Bookmarks Bar）</strong>：
+                    </p>
+
+                    <a
+                      href={bookmarkletCode}
+                      draggable
+                      onClick={(e) => {
+                        e.preventDefault();
+                        alert('请按住此按钮，直接拖动到浏览器顶部的书签栏中即可完成安装！');
+                      }}
+                      className="px-6 py-3.5 bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold rounded-full text-sm shadow-md cursor-grab active:cursor-grabbing transition-transform active:scale-95 inline-flex items-center gap-2"
+                    >
+                      <Bookmark className="w-4 h-4 fill-zinc-950" />
+                      <span>⚡ LinkPulse 智能评论条 (拖我到书签栏)</span>
+                    </a>
+
+                    <p className="text-[11px] text-zinc-500 max-w-md">
+                      如果书签栏未显示，可在 Chrome 按 <kbd className="px-1.5 py-0.5 bg-white border border-zinc-200 rounded font-mono text-[10px]">Ctrl+Shift+B</kbd>（Mac: <kbd className="px-1.5 py-0.5 bg-white border border-zinc-200 rounded font-mono text-[10px]">Cmd+Shift+B</kbd>）显示书签栏。
+                    </p>
+                  </div>
+
+                  <div className="space-y-2 text-xs text-zinc-600">
+                    <p className="font-semibold text-zinc-900">使用方法：</p>
+                    <ol className="list-decimal list-inside space-y-1.5 leading-relaxed">
+                      <li>打开任意带有评论框的独立博客（WordPress / Ghost / Substack 等）。</li>
+                      <li>在浏览器书签栏上点击一下【⚡ LinkPulse 智能评论条】。</li>
+                      <li>评论框上方会立即唤起 MiniMax 智能意图悬浮条，一键自动织入高质量外链！</li>
+                    </ol>
+                  </div>
+                </div>
+              )}
+
+              {installMethod === 'zip' && (
+                <div className="space-y-4">
+                  <div className="space-y-3">
+                    <button
+                      type="button"
+                      onClick={handleDownloadZip}
+                      disabled={isPackagingZip}
+                      className="w-full py-3.5 px-6 bg-zinc-950 hover:bg-zinc-800 text-white font-semibold rounded-xl text-sm flex items-center justify-center gap-2 shadow-sm transition-colors cursor-pointer"
+                    >
+                      <Download className="w-4 h-4" />
+                      <span>{isPackagingZip ? '正在打包 ZIP 文件...' : '一键下载扩展安装包 (linkpulse-extension-v1.3.zip)'}</span>
+                    </button>
+                  </div>
+
+                  <div className="space-y-2.5 text-xs text-zinc-600">
+                    <p className="font-semibold text-zinc-900">三步加载进浏览器：</p>
+                    <ol className="list-decimal list-inside space-y-2 leading-relaxed">
+                      <li>
+                        <strong>解压文件：</strong>将下载的 ZIP 包解压至本地任意固定文件夹。
+                      </li>
+                      <li>
+                        <strong>访问扩展页：</strong>在新标签页打开浏览器扩展管理中心：
+                        <div className="flex items-center gap-2 mt-1.5">
+                          <code className="px-2.5 py-1 bg-zinc-100 rounded font-mono text-zinc-900">chrome://extensions</code>
+                          <button
+                            type="button"
+                            onClick={handleCopyExtensionsUrl}
+                            className="px-2.5 py-1 text-xs bg-zinc-200 hover:bg-zinc-300 rounded font-medium text-zinc-800 transition-colors cursor-pointer inline-flex items-center gap-1"
+                          >
+                            {copiedExtensionsUrl ? (
+                              <>
+                                <Check className="w-3 h-3 text-emerald-700" />
+                                <span>已复制</span>
+                              </>
+                            ) : (
+                              <>
+                                <Copy className="w-3 h-3" />
+                                <span>复制网址</span>
+                              </>
+                            )}
+                          </button>
+                        </div>
+                      </li>
+                      <li>
+                        <strong>开启并加载：</strong>开启页面右上角的「开发者模式 (Developer mode)」，点击左上角「加载已解压的扩展程序」，选择刚才解压出来的文件夹即可！
+                      </li>
+                    </ol>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-4 bg-zinc-50 border-t border-zinc-200 flex items-center justify-between text-xs text-zinc-500">
+              <span>预置推广站点：soundtest.pro / jmcy.cn / franvetted.com</span>
+              <button
+                type="button"
+                onClick={() => setShowInstallModal(false)}
+                className="px-3.5 py-1.5 font-medium text-zinc-700 hover:text-zinc-950 bg-white border border-zinc-300 rounded-lg hover:bg-zinc-100 transition-colors cursor-pointer"
+              >
+                关闭
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </section>
   );
 }

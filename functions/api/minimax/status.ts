@@ -16,7 +16,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     JSON.stringify({
       engine: 'MiniMax OpenAI-Compatible Gateway',
       endpoint: context.env.MINIMAX_BASE_URL || 'https://api.minimax.io/v1/chat/completions',
-      supportedModels: ['MiniMax-M2', 'MiniMax-Text-01', 'MiniMax-M2.5'],
+      supportedModels: ['MiniMax-M3.1-Flash', 'MiniMax-M3.1', 'MiniMax-M3', 'MiniMax-Text-01'],
       directKeyConfigured: hasCustomMiniMaxKey,
       mode: hasCustomMiniMaxKey ? 'minimax_direct' : 'minimax_server_managed',
     }),

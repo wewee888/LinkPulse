@@ -186,7 +186,7 @@ export const BLOG_OPPORTUNITIES: BlogOpportunity[] = [
     title: 'Benchmarking Long-Context LLMs for Automated Financial & Legal Document Auditing',
     url: 'https://devtoolsweekly.org/issues/long-context-llm-benchmarks',
     excerpt:
-      'With 1M-token context windows in models like MiniMax-Text-01 and MiniMax-M2, diligence analysts can ingest 300-page Franchise Disclosure Documents (FDD) and legal contracts at once. This eliminates hallucinated summaries and surfaces hidden fee clauses.',
+      'With 1M-token context windows in models like MiniMax-Text-01 and MiniMax-M3.1-Flash, diligence analysts can ingest 300-page Franchise Disclosure Documents (FDD) and legal contracts at once. This eliminates hallucinated summaries and surfaces hidden fee clauses.',
     niche: 'Developer Tools',
     cms: 'Substack',
     domainRating: 79,
@@ -271,7 +271,7 @@ export const INITIAL_QUEUE_ITEMS: BacklinkQueueItem[] = [
     spamScore: 4,
     status: 'indexed',
     createdAt: '2026-10-21 14:20',
-    modelUsed: 'MiniMax-M2',
+    modelUsed: 'MiniMax-M3.1-Flash',
   },
   {
     id: 'q-102',
@@ -311,7 +311,7 @@ export const INITIAL_QUEUE_ITEMS: BacklinkQueueItem[] = [
     spamScore: 5,
     status: 'published',
     createdAt: '2026-10-22 00:40',
-    modelUsed: 'MiniMax-M2',
+    modelUsed: 'MiniMax-M3.1-Flash',
   },
   {
     id: 'q-104',
@@ -331,7 +331,7 @@ export const INITIAL_QUEUE_ITEMS: BacklinkQueueItem[] = [
     spamScore: 4,
     status: 'queued',
     createdAt: '2026-10-22 02:15',
-    modelUsed: 'MiniMax-M2.5',
+    modelUsed: 'MiniMax-M3.1',
   },
 ];
 

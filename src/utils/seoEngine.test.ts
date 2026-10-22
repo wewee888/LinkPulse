@@ -97,7 +97,7 @@ test('synthesizeMiniMaxComments returns 3 complete variants with HTML and WordPr
     objective: 'add_insight',
     placementMode: 'html_anchor',
     anchorType: 'partial_match',
-    model: 'MiniMax-M2',
+    model: 'MiniMax-M3.1-Flash',
     language: 'en',
   });
 
@@ -141,7 +141,7 @@ test('buildSeoConversionAnalytics generates 30-day series and DR/spam buckets dy
       spamScore: 3,
       status: 'indexed',
       createdAt: '2026-10-22 10:00',
-      modelUsed: 'MiniMax-M2',
+      modelUsed: 'MiniMax-M3.1-Flash',
     },
   ]);
 
@@ -163,7 +163,7 @@ test('generateChromeExtensionFiles builds valid Manifest V3 bundle with soundtes
     defaultBrandName: 'SoundTest Pro',
     defaultAuthorName: 'Alex Chen',
     defaultAuthorEmail: 'alex@soundtest.pro',
-    defaultModel: 'MiniMax-M2',
+    defaultModel: 'MiniMax-M3.1-Flash',
     defaultPlacementMode: 'html_anchor',
   });
 

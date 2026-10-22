@@ -40,7 +40,7 @@ const INITIAL_REQUEST: CommentGenerationRequest = {
   objective: 'add_insight',
   placementMode: 'html_anchor',
   anchorType: 'branded',
-  model: 'MiniMax-M2',
+  model: 'MiniMax-M3.1-Flash',
   language: DEFAULT_SITE_PROFILES[0].preferredLanguage,
 };
 

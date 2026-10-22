@@ -68,7 +68,7 @@ export function CommentWorkbench({
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [editingVariantId, setEditingVariantId] = useState<string | null>(null);
   const [editDraft, setEditDraft] = useState<string>('');
-  const [lastModelUsed, setLastModelUsed] = useState<string>('MiniMax-M2');
+  const [lastModelUsed, setLastModelUsed] = useState<string>('MiniMax-M3.1-Flash');
 
   const handleLoadPresetBlog = (blog: BlogOpportunity) => {
     setFieldErrors({});
@@ -799,7 +799,7 @@ export function CommentWorkbench({
                 同一目标 URL 在单日内建议混用「品牌锚文本」与「WordPress Website 字段落链」，避免触发 Akismet 域名黑名单。
               </div>
               <span className="font-mono tabular-nums text-zinc-500 shrink-0">
-                MiniMax-M2 语义防重已启用
+                MiniMax-M3.1-Flash 语义防重已启用
               </span>
             </div>
           </div>
