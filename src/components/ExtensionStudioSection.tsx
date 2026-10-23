@@ -398,40 +398,55 @@ export function ExtensionStudioSection({
                       方案一：油猴 / 脚本猫一键直装
                     </span>
                     <span className="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded">
-                      最推荐
+                      全自动
                     </span>
                   </div>
                   <p className="text-xs text-zinc-600 leading-relaxed">
-                    无需解压或手动配环境。已装 Tampermonkey / 脚本猫直接点击下方按钮，浏览器秒级弹出原生安装面板。
+                    若已装油猴，点击下方按钮直接唤起安装；若未装油猴打开会显示源码，可先在官方商店添加一次油猴（或用方案二）。
                   </p>
                 </div>
 
-                <a
-                  href="/linkpulse.user.js"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full py-2.5 px-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg text-xs text-center flex items-center justify-center gap-1.5 shadow-xs transition-transform active:scale-95 cursor-pointer"
-                >
-                  <Zap className="w-3.5 h-3.5 fill-white" />
-                  <span>立即一键装入浏览器</span>
-                  <ExternalLink className="w-3.5 h-3.5 opacity-80" />
-                </a>
+                <div className="space-y-2">
+                  <a
+                    href="/linkpulse.user.js"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full py-2.5 px-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg text-xs text-center flex items-center justify-center gap-1.5 shadow-xs transition-transform active:scale-95 cursor-pointer"
+                  >
+                    <Zap className="w-3.5 h-3.5 fill-white" />
+                    <span>⚡ 立即一键装入油猴脚本</span>
+                    <ExternalLink className="w-3.5 h-3.5 opacity-80" />
+                  </a>
+
+                  <div className="p-2 bg-zinc-50 border border-zinc-200 rounded-lg text-[11px] text-zinc-500 flex items-center justify-between">
+                    <span>首次点击显示代码？</span>
+                    <a
+                      href="https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-emerald-700 hover:text-emerald-900 font-semibold underline inline-flex items-center gap-1"
+                    >
+                      <span>在 Chrome 商店一键添加</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
+                </div>
               </div>
 
               {/* Method 2: Drag-and-drop Bookmarklet */}
-              <div className="p-4 bg-white border border-zinc-300 rounded-xl shadow-xs flex flex-col justify-between space-y-3">
+              <div className="p-4 bg-white border-2 border-amber-500/50 rounded-xl shadow-xs flex flex-col justify-between space-y-3">
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-zinc-900 flex items-center gap-1.5">
                       <Bookmark className="w-4 h-4 text-amber-600 fill-amber-500" />
-                      方案二：免安装书签栏
+                      方案二：免安装书签栏 (推荐)
                     </span>
-                    <span className="text-[10px] font-semibold bg-zinc-100 text-zinc-700 px-1.5 py-0.5 rounded">
-                      0 依赖
+                    <span className="text-[10px] font-bold bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded">
+                      0 插件依赖
                     </span>
                   </div>
                   <p className="text-xs text-zinc-600 leading-relaxed">
-                    无需安装任何扩展插件。按住下方胶囊拖至浏览器顶部书签栏，打开任意博客点一下即可唤起。
+                    完全无需安装任何扩展或油猴！按住下方胶囊直接拖入您浏览器顶部的书签栏，在任意博客点一下即可唤起。
                   </p>
                 </div>
 
@@ -442,10 +457,10 @@ export function ExtensionStudioSection({
                     e.preventDefault();
                     alert('请按住此按钮，直接拖动到浏览器顶部的书签栏中即可完成安装！');
                   }}
-                  className="w-full py-2.5 px-3 bg-zinc-900 hover:bg-zinc-800 text-white font-bold rounded-lg text-xs text-center flex items-center justify-center gap-1.5 shadow-xs cursor-grab active:cursor-grabbing transition-transform active:scale-95"
+                  className="w-full py-2.5 px-3 bg-amber-500 hover:bg-amber-400 text-zinc-950 font-bold rounded-lg text-xs text-center flex items-center justify-center gap-1.5 shadow-xs cursor-grab active:cursor-grabbing transition-transform active:scale-95"
                 >
-                  <Bookmark className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                  <span>按住拖我到书签栏</span>
+                  <Bookmark className="w-3.5 h-3.5 fill-zinc-950 text-zinc-950" />
+                  <span>📌 按住我拖到顶部书签栏</span>
                 </a>
               </div>
 
@@ -1041,6 +1056,15 @@ export function ExtensionStudioSection({
                       <span>点击立即一键安装进浏览器</span>
                       <ExternalLink className="w-4 h-4 opacity-75" />
                     </a>
+                  </div>
+
+                                    <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-900 space-y-1.5">
+                    <p className="font-bold flex items-center gap-1.5 text-amber-950">
+                      <span>💡 为什么点击上方按钮后打开的是一整屏代码？</span>
+                    </p>
+                    <p className="text-[11px] text-amber-800 leading-relaxed">
+                      这是因为您的 Chrome 浏览器尚未安装 <strong>Tampermonkey (油猴)</strong> 扩展，Chrome 无法原生解析用户脚本。只需先点击下方链接在 Chrome 商店免费添加一次 Tampermonkey，添加后再点击上方绿色按钮，浏览器就会自动弹出安装面板！或者您可以直接使用上方标签页的「免安装书签」，0 插件直接拖到书签栏就能用！
+                    </p>
                   </div>
 
                   <div className="space-y-2 text-xs text-zinc-600">
