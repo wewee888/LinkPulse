@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {
   AnchorType,
+  BlogOpportunity,
   CommentGenerationRequest,
   CommentLanguage,
   CommentObjective,
@@ -10,7 +11,7 @@ import {
   PromotedSiteProfile,
   validateCommentForm,
 } from '../utils/seoEngine';
-import { BLOG_OPPORTUNITIES, BlogOpportunity } from '../data/seoPresets';
+import { BLOG_OPPORTUNITIES } from '../data/seoPresets';
 import { Check, Copy, ExternalLink, Plus, RefreshCw, Search } from 'lucide-react';
 
 interface CommentWorkbenchProps {
@@ -103,14 +104,14 @@ export function CommentWorkbench({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url: formState.articleUrl }),
       });
-      const data = await res.json();
+      const data = (await res.json()) as { error?: string; title?: string; excerpt?: string };
       if (!res.ok) {
         setServerError(data.error || 'URL 抓取失败');
       } else {
         onChangeForm((prev) => ({
           ...prev,
-          articleTitle: data.title,
-          articleContent: data.excerpt,
+          articleTitle: data.title || '',
+          articleContent: data.excerpt || '',
         }));
       }
     } catch {
@@ -145,7 +146,7 @@ export function CommentWorkbench({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formState),
       });
-      const data = await response.json();
+      const data = (await response.json()) as { error?: string; fieldErrors?: Record<string, string>; variants?: GeneratedCommentVariant[]; model?: string };
       if (!response.ok) {
         if (data.fieldErrors) {
           setFieldErrors(data.fieldErrors);

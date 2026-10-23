@@ -53,7 +53,7 @@
   "brandName": "SoundTest Pro",
   "authorName": "Alex Chen",
   "authorEmail": "alex@soundtest.pro",
-  "model": "MiniMax-M2",
+  "model": "MiniMax-M3.1-Flash",
   "placementMode": "html_anchor"
 };
 
@@ -109,7 +109,7 @@
     const optionsHtml = SITE_PROFILES.map((s) => `<option value="${s.domain}">${s.domain} (${s.defaultKeyword})</option>`).join('');
     bar.innerHTML = `
       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
-        <strong>LinkPulse · MiniMax SEO 外链插件 (MiniMax-M2)</strong>
+        <strong>LinkPulse · MiniMax SEO 外链插件 (MiniMax-M3.1-Flash)</strong>
         <select data-role="site-select" style="padding:3px 8px;border-radius:6px;border:1px solid #d4d4d8;font-size:11px;font-family:monospace;">
           ${optionsHtml}
         </select>

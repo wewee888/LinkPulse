@@ -35,6 +35,10 @@ export function ExtensionStudioSection({
     'manifest.json' | 'content.js' | 'popup.html' | 'background.js'
   >('content.js');
   const [copiedFile, setCopiedFile] = useState<string | null>(null);
+  const [showInstallModal, setShowInstallModal] = useState(false);
+  const [installMethod, setInstallMethod] = useState<'userscript' | 'bookmarklet' | 'zip'>('userscript');
+  const [isPackagingZip, setIsPackagingZip] = useState(false);
+  const [copiedExtensionsUrl, setCopiedExtensionsUrl] = useState(false);
 
   // Add Custom Site Form State
   const [newSiteUrl, setNewSiteUrl] = useState('');

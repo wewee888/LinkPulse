@@ -11,7 +11,7 @@ export const onRequestGet: PagesFunction = async (context) => {
     defaultBrandName: 'SoundTest Pro',
     defaultAuthorName: 'Alex Chen',
     defaultAuthorEmail: 'alex@soundtest.pro',
-    defaultModel: 'MiniMax-M2',
+    defaultModel: 'MiniMax-M3.1-Flash',
     defaultPlacementMode: 'html_anchor',
   });
 

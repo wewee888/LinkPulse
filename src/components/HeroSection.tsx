@@ -98,12 +98,12 @@ export function HeroSection({ onApplyHeroDemo, onOpenCompetitorReport }: HeroSec
                   <span className="font-mono tabular-nums">DR 84 WordPress Blog</span>
                 </div>
                 <p className="text-sm font-semibold text-zinc-900">
-                  {activeDemo.articleTitle}
+                  博文：《Why Crawl Budget & Contextual Co-Citations Matter in 2026》
                 </p>
               </div>
 
               <span className="px-2.5 py-1 text-xs font-mono font-medium rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 shrink-0">
-                {activeDemo.expectedRel} 推荐
+                {activeDemo.placementNote}
               </span>
             </div>
 
@@ -138,7 +138,7 @@ export function HeroSection({ onApplyHeroDemo, onOpenCompetitorReport }: HeroSec
                           isSelected ? 'text-zinc-300' : 'text-zinc-500'
                         }`}
                       >
-                        {demo.angle}
+                        {demo.enLabel}
                       </div>
                     </button>
                   );
@@ -162,7 +162,7 @@ export function HeroSection({ onApplyHeroDemo, onOpenCompetitorReport }: HeroSec
                 <div className="flex items-center gap-2">
                   <span className="text-zinc-500">落链目标：</span>
                   <span className="font-mono font-medium text-zinc-900">
-                    {activeDemo.targetBrand} ({activeDemo.anchorKeyword})
+                    {activeDemo.targetUrl} ({activeDemo.anchorText})
                   </span>
                 </div>
 
