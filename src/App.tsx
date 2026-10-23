@@ -297,7 +297,7 @@ export default function App() {
           <div className="space-y-1">
             <p className="font-bold text-zinc-950">LinkPulse Commenter</p>
             <p>
-              基于 MiniMax-M2 与 MiniMax-Text-01 构建的智能博客评论与白帽外链 SEO 增长平台 · 已预置 soundtest.pro / jmcy.cn / franvetted.com
+              基于 MiniMax-M3.1-Flash 与 MiniMax-M3.1 构建的智能博客评论与白帽外链 SEO 增长平台 · 已预置 soundtest.pro / jmcy.cn / franvetted.com
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-6">

@@ -6,6 +6,7 @@ import {
   CommentLanguage,
   CommentObjective,
   GeneratedCommentVariant,
+  MINIMAX_MODEL_OPTIONS,
   MiniMaxModelId,
   PlacementMode,
   PromotedSiteProfile,
@@ -509,9 +510,14 @@ export function CommentWorkbench({
             <div className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label htmlFor="minimax-model-select" className="block text-xs font-medium text-zinc-700 mb-1.5">
-                    MiniMax 大模型底座选择
-                  </label>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label htmlFor="minimax-model-select" className="text-xs font-medium text-zinc-700">
+                      MiniMax 大模型底座选择
+                    </label>
+                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
+                      MiniMax 官方最新架构
+                    </span>
+                  </div>
                   <select
                     id="minimax-model-select"
                     value={formState.model}
@@ -523,10 +529,15 @@ export function CommentWorkbench({
                     }
                     className="w-full px-3 py-2 text-sm bg-white border border-zinc-300 rounded-lg focus:outline-none focus:border-zinc-950 font-mono"
                   >
-                    <option value="MiniMax-M2">MiniMax-M2 (深度推理与锚点编织)</option>
-                    <option value="MiniMax-Text-01">MiniMax-Text-01 (1M 超长博文上下文)</option>
-                    <option value="MiniMax-M2.5">MiniMax-M2.5 (极速批量外链生成)</option>
+                    {MINIMAX_MODEL_OPTIONS.map((m) => (
+                      <option key={m.id} value={m.id}>
+                        {m.name} ({m.badge})
+                      </option>
+                    ))}
                   </select>
+                  <p className="mt-1 text-[11px] text-zinc-500">
+                    {MINIMAX_MODEL_OPTIONS.find((m) => m.id === formState.model)?.desc || '最新 MiniMax 官方文本生成大模型'}
+                  </p>
                 </div>
 
                 <div>

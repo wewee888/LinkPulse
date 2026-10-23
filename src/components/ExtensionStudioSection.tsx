@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import {
   BacklinkQueueItem,
   CommentObjective,
+  MINIMAX_MODEL_OPTIONS,
   MiniMaxModelId,
   PlacementMode,
   PromotedSiteProfile,
@@ -786,9 +787,11 @@ export function ExtensionStudioSection({
                       onChange={(e) => setExtModel(e.target.value as MiniMaxModelId)}
                       className="px-2.5 py-1 text-xs font-mono bg-zinc-50 border border-zinc-300 rounded-md"
                     >
-                      <option value="MiniMax-M3.1-Flash">MiniMax-M3.1-Flash</option>
-                      <option value="MiniMax-Text-01">MiniMax-Text-01</option>
-                      <option value="MiniMax-M3.1-Flash.5">MiniMax-M3.1-Flash.5</option>
+                      {MINIMAX_MODEL_OPTIONS.map((m) => (
+                        <option key={m.id} value={m.id}>
+                          {m.name} ({m.badge})
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </div>

@@ -1,5 +1,39 @@
 export type MiniMaxModelId = 'MiniMax-M3.1-Flash' | 'MiniMax-M3.1' | 'MiniMax-M3' | 'MiniMax-Text-01';
 
+export interface MiniMaxModelOption {
+  id: MiniMaxModelId;
+  name: string;
+  badge: string;
+  desc: string;
+}
+
+export const MINIMAX_MODEL_OPTIONS: MiniMaxModelOption[] = [
+  {
+    id: 'MiniMax-M3.1-Flash',
+    name: 'MiniMax-M3.1-Flash',
+    badge: '最新默认 · 旗舰极速',
+    desc: '最新高性价比极速旗舰大模型，首字极速响应，高质量博文语境引用与锚点织入',
+  },
+  {
+    id: 'MiniMax-M3.1',
+    name: 'MiniMax-M3.1',
+    badge: '最强旗舰 · 深度逻辑',
+    desc: 'MiniMax 最新综合能力最强旗舰基座，超强复杂逻辑推理与高过审率评论',
+  },
+  {
+    id: 'MiniMax-M3',
+    name: 'MiniMax-M3',
+    badge: '百万长文 · 深度通读',
+    desc: '百万 Token 超长上下文旗舰大模型，完整通读万字技术长文与多轮互动',
+  },
+  {
+    id: 'MiniMax-Text-01',
+    name: 'MiniMax-Text-01',
+    badge: '经典基座 · 稳定生成',
+    desc: '千亿级经典文本生成模型，稳定输出高质量自然语言',
+  },
+];
+
 export type CommentObjective =
   | 'add_insight'
   | 'case_study'

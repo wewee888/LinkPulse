@@ -352,7 +352,7 @@ export const COMPETITOR_COMPARISON: CompetitorDimension[] = [
   {
     dimension: '底层大模型引擎',
     originalSite: '通用轻量级短文本补全接口，仅读取几十词的社交贴文 Caption',
-    ourPlatform: '深度集成 MiniMax 大模型矩阵（MiniMax-M2 深度推理 + MiniMax-Text-01 百万级长上下文），一次通读整篇 5,000 字技术博文',
+    ourPlatform: '深度集成 MiniMax 大模型矩阵（最新 MiniMax-M3.1-Flash 旗舰极速 + MiniMax-M3.1 深度推理 + MiniMax-M3 百万长上下文），一次通读整篇 5,000 字技术博文',
     seoImpact: '精准引用博文第 3-5 段细节论据，站长人工审稿通过率从 <25% 跃升至 94%+',
   },
   {
