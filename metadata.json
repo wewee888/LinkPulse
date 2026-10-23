@@ -1,6 +1,6 @@
 {
   "name": "LinkPulse — MiniMax 博客评论与外链 SEO 增长引擎",
-  "description": "基于 MiniMax 大模型构建的智能博客评论与高质量外链 SEO 自动化平台，对标并升级 comment-generator.com，支持博文语境解析、锚文本自然植入、反垃圾评分与外链发布策略管理。",
+  "description": "基于 MiniMax 大模型构建的智能博客评论与高质量外链 SEO 自动化平台，深度对标海外顶级外链增长工具，支持博文语境解析、锚文本自然植入、反垃圾评分与外链发布策略管理。",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
