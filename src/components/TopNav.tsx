@@ -1,3 +1,4 @@
+import { Zap } from 'lucide-react';
 export type NavSectionId =
   | 'workbench'
   | 'extension'
@@ -10,9 +11,10 @@ interface TopNavProps {
   activeSection: NavSectionId;
   queueCount: number;
   onNavigate: (section: NavSectionId) => void;
+  onOpenInstallModal?: () => void;
 }
 
-export function TopNav({ activeSection, queueCount, onNavigate }: TopNavProps) {
+export function TopNav({ activeSection, queueCount, onNavigate, onOpenInstallModal }: TopNavProps) {
   return (
     <header className="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-zinc-200">
       <div className="max-w-[1360px] mx-auto flex items-center justify-between gap-8 px-6 py-4">
@@ -91,10 +93,17 @@ export function TopNav({ activeSection, queueCount, onNavigate }: TopNavProps) {
         <div className="flex items-center shrink-0">
           <button
             type="button"
-            onClick={() => onNavigate('extension')}
-            className="px-4 py-2 text-xs font-semibold text-white bg-zinc-950 rounded-lg hover:bg-zinc-800 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            onClick={() => {
+              if (onOpenInstallModal) {
+                onOpenInstallModal();
+              } else {
+                onNavigate('extension');
+              }
+            }}
+            className="px-3.5 py-1.5 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 rounded-lg transition-all whitespace-nowrap shrink-0 cursor-pointer flex items-center gap-1.5 shadow-xs active:scale-95"
           >
-            获取 Chrome 插件
+            <Zap className="w-3.5 h-3.5 fill-white" />
+            <span>一键安装 Chrome 插件</span>
           </button>
         </div>
       </div>

@@ -63,6 +63,7 @@ export default function App() {
   const [queueItems, setQueueItems] = useState<BacklinkQueueItem[]>(INITIAL_QUEUE_ITEMS);
   const [queuedVariantIds, setQueuedVariantIds] = useState<Set<string>>(new Set());
   const [statusBanner, setStatusBanner] = useState<string | null>(null);
+  const [showInstallModal, setShowInstallModal] = useState(false);
 
   const showToast = (msg: string) => {
     setStatusBanner(msg);
@@ -232,6 +233,7 @@ export default function App() {
         activeSection={activeSection}
         queueCount={queueItems.length}
         onNavigate={scrollToSection}
+        onOpenInstallModal={() => setShowInstallModal(true)}
       />
 
       {statusBanner && (
@@ -267,6 +269,8 @@ export default function App() {
           onSelectSite={handleSelectSiteProfile}
           onAddCustomSite={handleAddCustomSite}
           onPushSimulatedCommentToQueue={handlePushSimulatedCommentToQueue}
+          showInstallModal={showInstallModal}
+          onToggleInstallModal={setShowInstallModal}
         />
 
         <BlogDiscoverySection

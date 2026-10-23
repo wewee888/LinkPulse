@@ -18,6 +18,8 @@ interface ExtensionStudioSectionProps {
   onSelectSite: (site: PromotedSiteProfile) => void;
   onAddCustomSite: (site: PromotedSiteProfile) => void;
   onPushSimulatedCommentToQueue: (item: BacklinkQueueItem) => void;
+  showInstallModal?: boolean;
+  onToggleInstallModal?: (open: boolean) => void;
 }
 
 export function ExtensionStudioSection({
@@ -26,6 +28,8 @@ export function ExtensionStudioSection({
   onSelectSite,
   onAddCustomSite,
   onPushSimulatedCommentToQueue,
+  showInstallModal: propShowModal,
+  onToggleInstallModal: propToggleModal,
 }: ExtensionStudioSectionProps) {
   const activeSite =
     siteProfiles.find((s) => s.id === activeSiteId) || siteProfiles[0];
@@ -36,7 +40,9 @@ export function ExtensionStudioSection({
     'manifest.json' | 'content.js' | 'popup.html' | 'background.js'
   >('content.js');
   const [copiedFile, setCopiedFile] = useState<string | null>(null);
-  const [showInstallModal, setShowInstallModal] = useState(false);
+  const [internalShowModal, setInternalShowModal] = useState(false);
+  const showInstallModal = propShowModal !== undefined ? propShowModal : internalShowModal;
+  const setShowInstallModal = propToggleModal || setInternalShowModal;
   const [installMethod, setInstallMethod] = useState<'userscript' | 'bookmarklet' | 'zip'>('userscript');
   const [isPackagingZip, setIsPackagingZip] = useState(false);
   const [copiedExtensionsUrl, setCopiedExtensionsUrl] = useState(false);
@@ -338,14 +344,140 @@ export function ExtensionStudioSection({
             </p>
           </div>
 
-          <button
-            type="button"
-            onClick={handleDownloadAllExtensionFiles}
-            className="px-4 py-2.5 text-xs font-semibold text-white bg-zinc-950 hover:bg-zinc-800 rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer inline-flex items-center gap-2"
-          >
-            <Download className="w-4 h-4" />
-            <span>一键下载 Chrome 插件包 (Manifest V3 四件套)</span>
-          </button>
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setShowInstallModal(true)}
+              className="px-5 py-2.5 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 rounded-xl transition-all whitespace-nowrap shrink-0 cursor-pointer inline-flex items-center gap-2 shadow-md hover:shadow-lg active:scale-95"
+            >
+              <Zap className="w-4 h-4 fill-white text-white" />
+              <span>⚡ 一键安装到浏览器 (油猴/脚本猫/书签)</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={handleDownloadZip}
+              disabled={isPackagingZip}
+              className="px-4 py-2.5 text-xs font-semibold text-zinc-800 bg-zinc-100 hover:bg-zinc-200 border border-zinc-300 rounded-xl transition-colors whitespace-nowrap shrink-0 cursor-pointer inline-flex items-center gap-2"
+            >
+              <Download className="w-4 h-4 text-zinc-600" />
+              <span>{isPackagingZip ? '正在打包 ZIP...' : '下载离线扩展包 (.ZIP)'}</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Instant 1-Click Installation Fast-Track Banner */}
+        <div className="p-6 md:p-8 bg-gradient-to-r from-emerald-50/90 via-teal-50/50 to-zinc-50 border-b border-zinc-200">
+          <div className="max-w-5xl space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5">
+                <span className="px-2.5 py-0.5 text-[11px] font-bold rounded-full bg-emerald-600 text-white uppercase tracking-wider">
+                  1-Click Direct Install
+                </span>
+                <h3 className="text-base font-bold text-zinc-950">
+                  浏览器一键安装极速通道（3 种方式任选，立即启用）
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowInstallModal(true)}
+                className="text-xs font-semibold text-emerald-800 hover:text-emerald-950 underline cursor-pointer inline-flex items-center gap-1"
+              >
+                <span>查看详细图文教程</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+              {/* Method 1: Userscript 1-Click Direct */}
+              <div className="p-4 bg-white border-2 border-emerald-500/50 rounded-xl shadow-xs flex flex-col justify-between space-y-3">
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-emerald-950 flex items-center gap-1.5">
+                      <Zap className="w-4 h-4 text-emerald-600 fill-emerald-600" />
+                      方案一：油猴 / 脚本猫一键直装
+                    </span>
+                    <span className="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded">
+                      最推荐
+                    </span>
+                  </div>
+                  <p className="text-xs text-zinc-600 leading-relaxed">
+                    无需解压或手动配环境。已装 Tampermonkey / 脚本猫直接点击下方按钮，浏览器秒级弹出原生安装面板。
+                  </p>
+                </div>
+
+                <a
+                  href="/linkpulse.user.js"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-2.5 px-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg text-xs text-center flex items-center justify-center gap-1.5 shadow-xs transition-transform active:scale-95 cursor-pointer"
+                >
+                  <Zap className="w-3.5 h-3.5 fill-white" />
+                  <span>立即一键装入浏览器</span>
+                  <ExternalLink className="w-3.5 h-3.5 opacity-80" />
+                </a>
+              </div>
+
+              {/* Method 2: Drag-and-drop Bookmarklet */}
+              <div className="p-4 bg-white border border-zinc-300 rounded-xl shadow-xs flex flex-col justify-between space-y-3">
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-zinc-900 flex items-center gap-1.5">
+                      <Bookmark className="w-4 h-4 text-amber-600 fill-amber-500" />
+                      方案二：免安装书签栏
+                    </span>
+                    <span className="text-[10px] font-semibold bg-zinc-100 text-zinc-700 px-1.5 py-0.5 rounded">
+                      0 依赖
+                    </span>
+                  </div>
+                  <p className="text-xs text-zinc-600 leading-relaxed">
+                    无需安装任何扩展插件。按住下方胶囊拖至浏览器顶部书签栏，打开任意博客点一下即可唤起。
+                  </p>
+                </div>
+
+                <a
+                  href={bookmarkletCode}
+                  draggable
+                  onClick={(e) => {
+                    e.preventDefault();
+                    alert('请按住此按钮，直接拖动到浏览器顶部的书签栏中即可完成安装！');
+                  }}
+                  className="w-full py-2.5 px-3 bg-zinc-900 hover:bg-zinc-800 text-white font-bold rounded-lg text-xs text-center flex items-center justify-center gap-1.5 shadow-xs cursor-grab active:cursor-grabbing transition-transform active:scale-95"
+                >
+                  <Bookmark className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                  <span>按住拖我到书签栏</span>
+                </a>
+              </div>
+
+              {/* Method 3: Download Offline ZIP */}
+              <div className="p-4 bg-white border border-zinc-300 rounded-xl shadow-xs flex flex-col justify-between space-y-3">
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-zinc-900 flex items-center gap-1.5">
+                      <Download className="w-4 h-4 text-blue-600" />
+                      方案三：离线扩展包 (.ZIP)
+                    </span>
+                    <span className="text-[10px] font-semibold bg-zinc-100 text-zinc-700 px-1.5 py-0.5 rounded">
+                      离线加载
+                    </span>
+                  </div>
+                  <p className="text-xs text-zinc-600 leading-relaxed">
+                    标准 Chrome Manifest V3 离线包。一键打包下载完整 ZIP 压缩文件，解压后载入开发者模式。
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleDownloadZip}
+                  disabled={isPackagingZip}
+                  className="w-full py-2.5 px-3 bg-zinc-100 hover:bg-zinc-200 text-zinc-900 font-bold border border-zinc-300 rounded-lg text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>{isPackagingZip ? '正在打包...' : '一键下载扩展 ZIP 包'}</span>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Multi-Site Profile Switcher & Custom Domain Adder */}
